@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>AI-dealer</title>
+    <!-- Bootstrap, fontaweso and CSS -->
+    <link rel="stylesheet" href=".././assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href=".././assets/css/all.min.css">
+
+    <style>
+        .main-page {
+            border-radius: 8px;
+            box-shadow: 0px 5px 10px #7a7474;
+        }
+
+        .container h4 {
+            font-family: "lora";
+            font-weight: bold;
+        }
+
+        .ket a {
+            width: 210px;
+            font-family: "lora";
+            font-size: 24px;
+        }
+
+        .features {
+            background: #EAEAEF;
+        }
+
+        .features p a {
+            margin-right: 5px;
+            margin-left: 5px;
+        }
+
+        .features p span {
+            font-size: 18px;
+        }
+
+        .figure-caption {
+            position: relative;
+            margin-top: 20px;
+        }
+
+        h5 {
+            font-size: 22px;
+            font-family: 'Gill Sans', 'Gill Sans MT', 'Calibri', 'Trebuchet MS', sans-serif;
+            font-weight: 700;
+            color: #171717;
+        }
+
+        .sale .har {
+            font-size: 16px;
+            font-family: Arial;
+            color: #FA591D;
+            font-weight: 600;
+        }
+
+        .sale {
+            box-shadow: 2px 3px 8px #7a7474;
+            height: 380px;
+
+        }
+
+        a.btn-outline-info {
+            margin-bottom: -8px;
+        }
+
+        .subheader {
+            background: white;
+            color: #4e4e4e;
+            text-align: center;
+            padding: 5px;
+            height: 50px;
+            padding-top: 2px;
+            width: 100%;
+            border-bottom-left-radius: 45px;
+            border-bottom-right-radius: 45px;
+            box-shadow: 0px 6px 8px #beb6b6;
+
+        }
+
+        /* tambahan */
+        .navbar {
+            background: #171717;
+            position: fixed;
+            left: 0;
+            top: 0;
+            right: 0;
+            margin: auto;
+            z-index: 10;
+            box-shadow: -15px 0px 30px #4e4e4e;
+        }
+
+        .nav-item {
+            margin-right: 24px;
+            font-weight: 400;
+        }
+
+        .nav-item.active a {
+            color: #f9B234 !important;
+            font-weight: 600;
+        }
+
+        .navbar-brand a {
+            font-weight: 600;
+        }
+
+        .navbar-brand span {
+            font-size: 24px;
+        }
+
+        .nav-link span {
+            color: #f9B234;
+            font-weight: 600;
+        }
+
+        .nav-link.user {
+            font-size: 16px;
+        }
+
+        /* akhir navigasi */
+        /* akhir footer */
+        .promo {
+            height: 410px;
+            background: #171717;
+            color: white;
+        }
+
+        .jam {
+            position: absolute;
+            top: 70px;
+            right: 20px;
+        }
+
+        .jam a {
+            background: #FA591D;
+            margin-right: 3px;
+        }
+
+        /* Responsive */
+        @media (max-width: 769px) {
+            .sale {
+                height: 470px;
+
+            }
+        }
+
+
+        /* akhir responsive */
+    </style>
+
+    <style>
+        .pagelog {
+            width: 500px;
+            max-width: 100%;
+            border-radius: 4px;
+            box-shadow: 2px 5px 10px #7a7474;
+        }
+
+        /* single */
+        .harga {
+            font-size: 18px;
+            font-family: Arial;
+            color: #FA591D;
+            font-weight: 600;
+        }
+
+        h4.nama-produk {
+            font-family: "montserrat";
+        }
+
+        .colorinput {
+            margin: 0;
+            position: relative;
+            cursor: pointer
+        }
+
+        .colorinput-color {
+            display: inline-block;
+            width: 1.75rem;
+            height: 1.75rem;
+            border-radius: 3px;
+            border: 1px solid rgba(0, 40, 100, .12);
+            color: #fff;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, .05)
+        }
+
+        .PNF {
+            margin-top: 80px;
+            height: 300px;
+            margin: auto;
+        }
+
+        .PNF h1 {
+            margin-top: 10px;
+            margin-bottom: -7px;
+            margin-left: -20px;
+            font-size: 150px;
+            font-weight: 800;
+            color: #201f1f;
+            text-shadow: 2px 2px 8px #4e4e4e;
+        }
+
+        .PNF h2 {
+            font-size: 40px;
+            font-weight: 600;
+        }
+
+        .PNF p {
+            font-size: 18px;
+        }
+
+        .PNF a {
+            font-size: 18px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body style="background:#EAEAEF">
+    <div class="jam">
+        <p id="time"></p>
+    </div>
+    <!-- Navbar  -->
+    <nav class="position-fixed navbar navbar-expand-lg navbar-dark">
+        <div class="container ">
+            <a class="navbar-brand" href="./">
+                <!-- <img src="./img/logo_small.png" alt="Mr.labaLaba"> -->
+                Ai-Dealer
+            </a>
+
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+                <ul class="navbar-nav text-uppercase mx-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">checkout</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">payment</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">about</a>
+                    </li>
+
+                </ul>
+
+                <a class="nav-link text-white user" href="#"> Login</a>
+                <!-- <a class="nav-link text-white user" href="#"> Muhammad Alfarozy</a> -->
+            </div>
+        </div>
+    </nav>
+    <!-- akhir Nav -->
+    <div class="col-12 mb-2  mt-2 p-3 ">
+        <div class="text-center container mt-5 p-4 p-2">
+            <section class="PNF">
+                <h1>404</h1>
+                <h2>Page Not Found</h2>
+                <p class="mt-2 mb-5">Halaman yang anda minta tidak di temukan di server kami </p>
+                <a class="btn btn-warning mt-3" href="#">Back Home</a>
+            </section>
+        </div>
+    </div>
+    <!-- jQuery first, then Popper.js, then Bootstrap JS,than fontawesome -->
+    <script src=".././assets/js/jquery-3.4.1.min.js"></script>
+    <script src=".././assets/js/popper.min.js"></script>
+    <script src=".././assets/js/bootstrap.min.js"></script>
+    <script src=".././assets/js/all.js"></script>
+
+</body>
+
+</html>
