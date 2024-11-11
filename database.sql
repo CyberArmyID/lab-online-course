@@ -98,20 +98,8 @@ CREATE TABLE user_courses (
     FOREIGN KEY (course_id) REFERENCES courses(id) ON DELETE CASCADE
 );
 
--- Tabel rewards
-CREATE TABLE rewards (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
-    points INT NOT NULL,
-    reward_item VARCHAR(255),
-    status ENUM('process', 'redeemed') DEFAULT 'process',
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
-);
-
 -- Tabel reward_items
-CREATE TABLE reward_items (
+CREATE TABLE rewards (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     required_points INT NOT NULL,
@@ -124,13 +112,13 @@ CREATE TABLE reward_items (
 CREATE TABLE reward_redemptions (
     id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT NOT NULL,
-    reward_item_id INT NOT NULL,
+    reward_id INT NOT NULL,
     points_used INT NOT NULL,
     status ENUM('process', 'redeemed') DEFAULT 'process',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    FOREIGN KEY (reward_item_id) REFERENCES reward_items(id) ON DELETE CASCADE
+    FOREIGN KEY (reward_id) REFERENCES rewards(id) ON DELETE CASCADE
 );
 
 
@@ -190,15 +178,8 @@ VALUES
     (2, 2, NOW(), NOW()),
     (2, 1, NOW(), NOW());
 
--- Data Dummy untuk Tabel rewards
-INSERT INTO rewards (user_id, points, reward_item, status, created_at, updated_at)
-VALUES
-    (1, 100, 'Gift Card', 'process', NOW(), NOW()),
-    (2, 50, 'Discount Coupon', 'process', NOW(), NOW()),
-    (3, 200, 'Amazon Voucher', 'process', NOW(), NOW());
-
 -- Data Dummy untuk Tabel reward_items
-INSERT INTO reward_items (name, required_points, stock, created_at, updated_at)
+INSERT INTO rewards (name, required_points, stock, created_at, updated_at)
 VALUES
     ('Gift Card', 50, 10, NOW(), NOW()),
     ('Discount Coupon', 30, 15, NOW(), NOW()),
@@ -210,11 +191,4 @@ VALUES
     ('DISCOUNT10', 10, NOW(), NOW()),
     ('SUMMER20', 20, NOW(), NOW()),
     ('WELCOME5', 5, NOW(), NOW());
-
--- Data Dummy untuk Tabel reward_redemptions
-INSERT INTO reward_redemptions (user_id, reward_item_id, points_used,status)
-VALUES
-    (1, 1, 50,'process'),
-    (2, 2, 30,'process'),
-    (3, 3, 200,'process');
 

@@ -29,8 +29,9 @@
                         <a class="dropdown-item" href="../auth/register.php">Daftar</a>
                     <?php } else { ?>
                         <a class="dropdown-item " href="../member/profile.php">Profil</a>
-                        <a class="dropdown-item " href="../member/transactions.php">Riwayat Transaksi</a>
                         <a class="dropdown-item " href="../member/courses.php">Kursus Saya</a>
+                        <a class="dropdown-item " href="../member/rewards.php">Penukaran Poin</a>
+                        <a class="dropdown-item " href="../member/transactions.php">Riwayat Transaksi</a>
                         <a class="dropdown-item " href="../auth/logout.php">keluar</a>
                     <?php } ?>
                 </div>
