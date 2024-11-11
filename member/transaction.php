@@ -3,7 +3,7 @@ $title = "Dashboard admin";
 include "../app/init.php";
 
 // Check if the user is logged in as admin
-if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
+if (!isset($_SESSION['role']) || $_SESSION['role'] != 'member') {
     header('location:../auth/login.php');
     exit;
 }
@@ -47,8 +47,6 @@ $sql = mysqli_query($con, "
         courses ON purchases.course_id = courses.id
     WHERE 
         purchases.id = $trxId
-    ORDER BY 
-        purchases.id DESC
 ");
 
 $row = mysqli_fetch_assoc($sql); // Fetch data as an associative array
@@ -582,12 +580,6 @@ $row = mysqli_fetch_assoc($sql); // Fetch data as an associative array
                         </tbody>
                     </table>
                     <br>
-                    <form action="" method="post">
-
-                        <input type="hidden" name="id" value="<?= htmlspecialchars($row['id']) ?>">
-                        <button name="submit" class="mt-5 btn btn-primary col-6" type="submit">Konfirmasi pembayaran</button>
-                        <br><br>
-                    </form>
                 </div>
             </div>
         </div>
