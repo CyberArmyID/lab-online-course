@@ -6,6 +6,7 @@ CREATE TABLE users (
     password VARCHAR(255) NOT NULL,
     avatar VARCHAR(255),
     bio TEXT,
+    point INT default 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -31,6 +32,7 @@ CREATE TABLE courses (
     title VARCHAR(255) NOT NULL,
     thumbnail VARCHAR(255) NOT NULL,
     description TEXT,
+    point INT DEFAULT 0,
     price DECIMAL(10, 2) NOT NULL,
     status ENUM('draft', 'publish') DEFAULT 'draft',  -- Status kursus
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -146,11 +148,11 @@ VALUES
     ('Koji Xenpai', 'koji@xenpai.com', SHA1('kojio'), NOW(), NOW());
 
 -- Data Dummy untuk Tabel courses
-INSERT INTO courses (title, thumbnail, description, price, status, created_at, updated_at)
+INSERT INTO courses (title, thumbnail,point, description, price, status, created_at, updated_at)
 VALUES
-    ('Introduction to Web Development', 'https://picsum.photos/seed/webdev/600/400', 'Learn the basics of web development including HTML, CSS, and JavaScript.', 100000.00, 'publish', NOW(), NOW()),
-    ('Advanced Python Programming', 'https://picsum.photos/seed/python/600/400', 'Master Python programming for data science, machine learning, and automation.', 150000.00, 'publish', NOW(), NOW()),
-    ('Digital Marketing 101', 'https://picsum.photos/seed/marketing/600/400', 'Learn how to use digital marketing tools and strategies to grow your business.', 75000.00, 'draft', NOW(), NOW());
+    ('Introduction to Web Development', 'https://picsum.photos/seed/webdev/600/400', 100,'Learn the basics of web development including HTML, CSS, and JavaScript.', 100000.00, 'publish', NOW(), NOW()),
+    ('Advanced Python Programming', 'https://picsum.photos/seed/python/600/400', 250,'Master Python programming for data science, machine learning, and automation.', 150000.00, 'publish', NOW(), NOW()),
+    ('Digital Marketing 101', 'https://picsum.photos/seed/marketing/600/400', 100,'Learn how to use digital marketing tools and strategies to grow your business.', 75000.00, 'draft', NOW(), NOW());
 
 -- Data Dummy untuk Tabel modules
 INSERT INTO modules (course_id, title, created_at, updated_at)

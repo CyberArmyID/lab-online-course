@@ -564,7 +564,16 @@ $row = mysqli_fetch_assoc($sql); // Fetch data as an associative array
                             <tr>
                                 <th>Status</th>
                                 <th>:</th>
-                                <td><?= htmlspecialchars($row['status']); ?></td>
+                                <td>
+                                    <?php if ($row['status'] == 'pending') { ?>
+                                        <span class="btn btn-sm btn-warning">Menunggu Pembayaran</span>
+                                    <?php } elseif ($row['status'] == 'confirmed') { ?>
+                                        <span class="btn btn-sm btn-success">Pembayaran Berhasil</span>
+                                    <?php } else { ?>
+                                        <span class="btn btn-sm btn-danger">Transaksi Dibatalkan </span>
+
+                                    <?php } ?>
+                                </td>
                             </tr>
                             <tr>
                                 <th>Bukti Pembayaran</th>

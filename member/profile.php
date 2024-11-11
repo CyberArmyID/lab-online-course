@@ -65,7 +65,8 @@ if ($user) {
                             </div>
                             <div class="col-sm-6 text-center">
                                 <h4 class="nama-user"><?= ucwords(htmlspecialchars($user['name'])); ?></h4>
-                                <h6 class="mt-"><?= htmlspecialchars($user['email']); ?></h6>
+                                <h6 class=""><?= htmlspecialchars($user['email']); ?></h6>
+                                <span class="badge badge-primary"><?= htmlspecialchars($user['point']); ?> Point</span>
                                 <div class="info mt-4">
                                     <div class="row">
                                         <div class="deskripsi col-12">

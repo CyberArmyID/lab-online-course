@@ -7,19 +7,49 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
     header('location:../auth/login.php');
     exit;
 }
+$trxId = $_GET['id'] ?? null;
+
+// Fetch transaction details
+$sql = mysqli_query($con, "
+    SELECT 
+        purchases.id,
+        users.id AS user_id,
+        users.point AS user_point,
+        courses.id AS course_id,
+        courses.point AS course_point
+    FROM 
+        purchases
+    JOIN 
+        users ON purchases.user_id = users.id
+    JOIN 
+        courses ON purchases.course_id = courses.id
+    WHERE 
+        purchases.id = '$trxId'
+");
+
+$trx = mysqli_fetch_assoc($sql); // Fetch data as an associative array
 
 if (isset($_POST['submit'])) {
     $trxId = $_POST['id'];
-
+    //> update status pembayaran
     $query = "UPDATE purchases SET `status` = 'confirmed' WHERE `id` = '$trxId'";
     $sqlTransactionConfirmation = mysqli_query($con, $query);
 
+    //> insert user course
+    $userId = $trx['user_id'];
+    $courseId = $trx['course_id'];
+    $query = "INSERT INTO user_courses (user_id, course_id) VALUES ($userId,$courseId)";
+    $sqlTransactionConfirmation = mysqli_query($con, $query);
+
+    $point = $trx['user_point'] +  $trx['course_point'];
+    //> update point user 
+    $query = "UPDATE users SET `point` = $point WHERE `id` = '$userId'";
+    $sqlTransactionConfirmation = mysqli_query($con, $query);
     $c_error = "alert alert-success alert-dismissible fade show";
     $pesan = "Transaksi berhasil dikonfirmasi";
     $hide = " ";
 }
 
-$trxId = $_GET['id'] ?? null;
 
 // Fetch transaction details
 $sql = mysqli_query($con, "
@@ -566,7 +596,16 @@ $row = mysqli_fetch_assoc($sql); // Fetch data as an associative array
                             <tr>
                                 <th>Status</th>
                                 <th>:</th>
-                                <td><?= htmlspecialchars($row['status']); ?></td>
+                                <td>
+                                    <?php if ($row['status'] == 'pending') { ?>
+                                        <span class="btn btn-sm btn-warning">Menunggu Pembayaran</span>
+                                    <?php } elseif ($row['status'] == 'confirmed') { ?>
+                                        <span class="btn btn-sm btn-success">Pembayaran Berhasil</span>
+                                    <?php } else { ?>
+                                        <span class="btn btn-sm btn-danger">Transaksi Dibatalkan </span>
+
+                                    <?php } ?>
+                                </td>
                             </tr>
                             <tr>
                                 <th>Bukti Pembayaran</th>
@@ -582,12 +621,14 @@ $row = mysqli_fetch_assoc($sql); // Fetch data as an associative array
                         </tbody>
                     </table>
                     <br>
-                    <form action="" method="post">
+                    <?php if ($row['status'] == 'pending') { ?>
+                        <form action="" method="post">
 
-                        <input type="hidden" name="id" value="<?= htmlspecialchars($row['id']) ?>">
-                        <button name="submit" class="mt-5 btn btn-primary col-6" type="submit">Konfirmasi pembayaran</button>
-                        <br><br>
-                    </form>
+                            <input type="hidden" name="id" value="<?= htmlspecialchars($row['id']) ?>">
+                            <button name="submit" class="mt-5 btn btn-primary col-6" type="submit">Konfirmasi pembayaran</button>
+                            <br><br>
+                        </form>
+                    <?php  } ?>
                 </div>
             </div>
         </div>

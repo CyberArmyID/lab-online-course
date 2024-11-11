@@ -13,37 +13,34 @@ $email = $_SESSION['email'];
 // Menggunakan Prepared Statements untuk keamanan
 $sql = "
     SELECT 
-        purchases.id,
-        purchases.status,
-        purchases.voucher_code,
-        purchases.total_price,
-        purchases.bank,
-        purchases.bank_account_name,
-        purchases.bank_account_number,
-        purchases.payment_proof,
-        purchases.created_at,
-        purchases.updated_at,
-        users.id AS user_id,
-        users.name AS user_name,
-        users.email AS user_email,
-        users.point AS user_point,
+        user_courses.id,
+        users.email,
         courses.id AS course_id,
-        courses.title AS course_title
+        courses.title AS course_title,
+        courses.thumbnail AS course_thumbnail,
+        courses.description AS course_description
     FROM 
-        purchases
+        user_courses
     JOIN 
-        users ON purchases.user_id = users.id
+        users ON user_courses.user_id = users.id
     JOIN 
-        courses ON purchases.course_id = courses.id
-    WHERE users.email = ?
-    ORDER BY 
-        purchases.id DESC
+        courses ON user_courses.course_id = courses.id
+    WHERE users.email = '$email'
 ";
+$sqlPurchases = mysqli_query($con, $sql);
 
-$stmt = mysqli_prepare($con, $sql);
-mysqli_stmt_bind_param($stmt, "s", $email);
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
+$result = mysqli_fetch_assoc($sqlPurchases);
+if (isset($result['course_id'])) {
+    $courseId = $result['course_id'];
+    $sqlModules = "SELECT * FROM modules WHERE course_id = $courseId";
+    $modules = mysqli_query($con, $sqlModules);
+} else {
+    echo "<script>
+        alert('Anda belum memiliki kelas ini');
+        window.history.back();
+    </script>";
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -108,38 +105,35 @@ $result = mysqli_stmt_get_result($stmt);
         <div class="container mt-5">
             <div class="col-12 mb-2 mt-2 p-3">
                 <div class="main-page container mt-5 p-4 bg-white p-2">
+                    <div class="row">
+
+                        <img class="col-3 border-rounded" src="<?= $result['course_thumbnail'] ?>" alt="">
+                        <div class="info">
+                            <h4><?= $result['course_title'] ?></h4>
+                            <h6><?= $result['course_description'] ?></h6>
+                        </div>
+                    </div>
+                    <hr>
+                    <h4>Modul</h4>
                     <div class="table-responsive-sm">
                         <table class="table table-striped text-nowrap">
                             <thead>
                                 <tr>
-                                    <th scope="col">ID Transaksi</th>
-                                    <th scope="col">Kursus</th>
-                                    <th scope="col">Harga</th>
-                                    <th scope="col">Tanggal Transaksi</th>
-                                    <th scope="col">Status</th>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Modul</th>
                                     <th scope="col">Detail</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php while ($transaction = mysqli_fetch_assoc($result)) { ?>
+                                <?php $no = 1;
+                                while ($module = mysqli_fetch_assoc($modules)) { ?>
                                     <tr>
-                                        <th scope="row"><?= htmlspecialchars($transaction['id']); ?></th>
-                                        <td><?= htmlspecialchars($transaction['course_title']); ?></td>
-                                        <td>Rp.<?= number_format($transaction['total_price'], 0, ',', '.'); ?></td>
-                                        <td><?= htmlspecialchars($transaction['created_at']); ?></td>
-                                        <td>
-                                            <?php if ($transaction['status'] == 'pending') { ?>
-                                                <span class="btn btn-sm btn-warning">Menunggu Pembayaran</span>
-                                            <?php } elseif ($transaction['status'] == 'confirmed') { ?>
-                                                <span class="btn btn-sm btn-success">Pembayaran Berhasil</span>
-                                            <?php } else { ?>
-                                                <span class="btn btn-sm btn-danger">Transaksi Dibatalkan </span>
-
-                                            <?php } ?>
-                                        </td>
-                                        <td><a class="btn btn-sm btn-primary" href="./transaction.php?id=<?= htmlspecialchars($transaction['id']); ?>">Detail</a></td>
+                                        <th scope="row"><?= $no++ ?></th>
+                                        <td><?= htmlspecialchars($module['title']); ?></td>
+                                        <td><a class="btn btn-sm btn-primary" href="./module.php?id=<?= htmlspecialchars($module['id']); ?>">Detail</a></td>
                                     </tr>
-                                <?php } ?>
+                                <?php
+                                } ?>
                             </tbody>
                         </table>
                     </div>
@@ -157,6 +151,5 @@ $result = mysqli_stmt_get_result($stmt);
 </html>
 
 <?php
-mysqli_stmt_close($stmt);
 mysqli_close($con);
 ?>

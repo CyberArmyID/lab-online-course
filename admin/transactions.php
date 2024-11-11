@@ -311,7 +311,16 @@ $sql = mysqli_query($con, "
                                         <td><?= $transaction['course_title']; ?></td>
                                         <td>Rp.<?= number_format($transaction['total_price'], 0, ',', '.');  ?></td>
                                         <td><?= $transaction['created_at'] ?></td>
-                                        <td><?= $transaction['status'] ?></td>
+                                        <td>
+                                            <?php if ($transaction['status'] == 'pending') { ?>
+                                                <span class="btn btn-sm btn-warning">Menunggu Pembayaran</span>
+                                            <?php } elseif ($transaction['status'] == 'confirmed') { ?>
+                                                <span class="btn btn-sm btn-success">Pembayaran Berhasil</span>
+                                            <?php } else { ?>
+                                                <span class="btn btn-sm btn-danger">Transaksi Dibatalkan </span>
+
+                                            <?php } ?>
+                                        </td>
                                         <td><a class="btn btn-sm btn-primary" href="./transaction.php?id=<?= $transaction['id'] ?> ">Detail</a>
                                         </td>
                                     </tr>
