@@ -135,9 +135,9 @@ CREATE TABLE reward_redemptions (
 -- Data Dummy untuk Tabel users
 INSERT INTO users (name, email, password, avatar, bio, created_at, updated_at)
 VALUES
-    ('John Doe', 'john.doe@example.com', SHA1('password123'), 'https://static.vecteezy.com/system/resources/previews/036/280/650/large_2x/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-illustration-vector.jpg', 'Software developer and tech enthusiast.', NOW(), NOW()),
-    ('Jane Smith', 'jane.smith@example.com', SHA1('password123'), 'https://static.vecteezy.com/system/resources/previews/036/280/650/large_2x/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-illustration-vector.jpg', 'Marketing specialist and business consultant.', NOW(), NOW()),
-    ('Koji Xenpai', 'koji@gmail.com', SHA1('password'), 'https://static.vecteezy.com/system/resources/previews/036/280/650/large_2x/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-illustration-vector.jpg', 'Graphic designer with a passion for UI/UX.', NOW(), NOW());
+    ('John Doe', 'john.doe@example.com', SHA1('password123'), 'default-avatars.jpg', 'Software developer and tech enthusiast.', NOW(), NOW()),
+    ('Jane Smith', 'jane.smith@example.com', SHA1('password123'), 'default-avatars.jpg', 'Marketing specialist and business consultant.', NOW(), NOW()),
+    ('Koji Xenpai', 'koji@gmail.com', SHA1('password'), 'default-avatars.jpg', 'Graphic designer with a passion for UI/UX.', NOW(), NOW());
 
 -- Data Dummy untuk Tabel admins
 INSERT INTO admins (name, email, password, created_at, updated_at)
