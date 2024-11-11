@@ -12,8 +12,7 @@ CREATE TABLE users (
 -- Tabel users (hanya untuk member)
 CREATE TABLE user_tokens (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    token VARCHAR(255) NOT NULL,
+    token VARCHAR(255) NOT NULL
 );
 
 -- Tabel admins (khusus untuk data admin)
@@ -29,7 +28,7 @@ CREATE TABLE admins (
 -- Tabel courses
 CREATE TABLE courses (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
+    title VARCHAR(255) NOT NULL,
     thumbnail VARCHAR(255) NOT NULL,
     description TEXT,
     price DECIMAL(10, 2) NOT NULL,
@@ -74,9 +73,12 @@ CREATE TABLE purchases (
     user_id INT NOT NULL,
     course_id INT NOT NULL,
     status ENUM('pending', 'confirmed', 'canceled') DEFAULT 'pending',
-    voucher_code VARCHAR(50),
+    voucher_code VARCHAR(50) NULL,
     total_price DECIMAL(10, 2),
-    payment_proof VARCHAR(255),
+    bank VARCHAR(200),
+    bank_account_name VARCHAR(200),
+    bank_account_number VARCHAR(200),
+    payment_proof VARCHAR(255) NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
@@ -133,22 +135,22 @@ CREATE TABLE reward_redemptions (
 -- Data Dummy untuk Tabel users
 INSERT INTO users (name, email, password, avatar, bio, created_at, updated_at)
 VALUES
-    ('John Doe', 'john.doe@example.com', SHA1('password123'), 'https://placeimg.com/150/150/people', 'Software developer and tech enthusiast.', NOW(), NOW()),
-    ('Jane Smith', 'jane.smith@example.com', SHA1('password123'), 'https://placeimg.com/150/150/people', 'Marketing specialist and business consultant.', NOW(), NOW()),
-    ('Koji Xenpai', 'koji@gmail.com', SHA1('password'), 'https://placeimg.com/150/150/people', 'Graphic designer with a passion for UI/UX.', NOW(), NOW());
+    ('John Doe', 'john.doe@example.com', SHA1('password123'), 'https://static.vecteezy.com/system/resources/previews/036/280/650/large_2x/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-illustration-vector.jpg', 'Software developer and tech enthusiast.', NOW(), NOW()),
+    ('Jane Smith', 'jane.smith@example.com', SHA1('password123'), 'https://static.vecteezy.com/system/resources/previews/036/280/650/large_2x/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-illustration-vector.jpg', 'Marketing specialist and business consultant.', NOW(), NOW()),
+    ('Koji Xenpai', 'koji@gmail.com', SHA1('password'), 'https://static.vecteezy.com/system/resources/previews/036/280/650/large_2x/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-illustration-vector.jpg', 'Graphic designer with a passion for UI/UX.', NOW(), NOW());
 
 -- Data Dummy untuk Tabel admins
 INSERT INTO admins (name, email, password, created_at, updated_at)
 VALUES
     ('Admin One', 'admin1@example.com', SHA1('admin123'), NOW(), NOW()),
-    ('Admin Two', 'admin2@example.com', SHA1('admin123'), NOW(), NOW());
+    ('Koji Xenpai', 'koji@xenpai.com', SHA1('kojio'), NOW(), NOW());
 
 -- Data Dummy untuk Tabel courses
-INSERT INTO courses (name, thumbnail, description, price, status, created_at, updated_at)
+INSERT INTO courses (title, thumbnail, description, price, status, created_at, updated_at)
 VALUES
-    ('Introduction to Web Development', 'https://placeimg.com/600/400/tech', 'Learn the basics of web development including HTML, CSS, and JavaScript.', 100.00, 'publish', NOW(), NOW()),
-    ('Advanced Python Programming', 'https://placeimg.com/600/400/nature', 'Master Python programming for data science, machine learning, and automation.', 150.00, 'publish', NOW(), NOW()),
-    ('Digital Marketing 101', 'https://placeimg.com/600/400/business', 'Learn how to use digital marketing tools and strategies to grow your business.', 75.00, 'draft', NOW(), NOW());
+    ('Introduction to Web Development', 'https://picsum.photos/seed/webdev/600/400', 'Learn the basics of web development including HTML, CSS, and JavaScript.', 100000.00, 'publish', NOW(), NOW()),
+    ('Advanced Python Programming', 'https://picsum.photos/seed/python/600/400', 'Master Python programming for data science, machine learning, and automation.', 150000.00, 'publish', NOW(), NOW()),
+    ('Digital Marketing 101', 'https://picsum.photos/seed/marketing/600/400', 'Learn how to use digital marketing tools and strategies to grow your business.', 75000.00, 'draft', NOW(), NOW());
 
 -- Data Dummy untuk Tabel modules
 INSERT INTO modules (course_id, title, created_at, updated_at)
@@ -165,12 +167,12 @@ VALUES
 INSERT INTO materials (module_id, title, content, created_at, updated_at)
 VALUES
     (1, 'HTML Syntax', 'Learn the basic syntax of HTML tags and structure.', NOW(), NOW()),
-    (1, 'CSS Selectors', 'Explore various CSS selectors to style HTML elements.', NOW(), NOW()),
-    (2, 'JavaScript Variables', 'Learn how to define variables and use them in JavaScript.', NOW(), NOW()),
-    (3, 'Python Basics', 'Introduction to Python syntax and variables.', NOW(), NOW()),
-    (3, 'NumPy Library', 'Advanced Python libraries for scientific computing.', NOW(), NOW()),
-    (4, 'SEO Basics', 'Learn the fundamentals of SEO and keyword optimization.', NOW(), NOW()),
-    (4, 'Facebook Marketing', 'Learn strategies for marketing your business on Facebook.', NOW(), NOW());
+    (2, 'CSS Selectors', 'Explore various CSS selectors to style HTML elements.', NOW(), NOW()),
+    (3, 'JavaScript Variables', 'Learn how to define variables and use them in JavaScript.', NOW(), NOW()),
+    (4, 'Python Basics', 'Introduction to Python syntax and variables.', NOW(), NOW()),
+    (5, 'NumPy Library', 'Advanced Python libraries for scientific computing.', NOW(), NOW()),
+    (6, 'SEO Basics', 'Learn the fundamentals of SEO and keyword optimization.', NOW(), NOW()),
+    (7, 'Facebook Marketing', 'Learn strategies for marketing your business on Facebook.', NOW(), NOW());
 
 -- Data Dummy untuk Tabel purchases
 INSERT INTO purchases (user_id, course_id, status, voucher_code, total_price, payment_proof, created_at, updated_at)
@@ -184,7 +186,7 @@ INSERT INTO user_courses (user_id, course_id, created_at, updated_at)
 VALUES
     (1, 1, NOW(), NOW()),
     (2, 2, NOW(), NOW()),
-    (3, 3, NOW(), NOW());
+    (2, 1, NOW(), NOW());
 
 -- Data Dummy untuk Tabel rewards
 INSERT INTO rewards (user_id, points, reward_item, status, created_at, updated_at)

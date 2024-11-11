@@ -1,34 +1,15 @@
 <?php
 include "../app/init.php";
 
-if (isset($_SESSION['name'])) {
+if (isset($_SESSION['role'])) {
     header('location:../index.php');
-}
-if (isset($_GET['status']) && $_GET['status']  == 'register-success') {
-    // pesan account sudah di buat 
-    $c_error = "alert alert-success alert-dismissible fade show";
-    $pesan = "Akun berhasil terdaftar, Silahkan login";
-    $hide = " ";
-}
-if (isset($_GET['status']) && $_GET['status']  == 'checkout') {
-    // pesan account sudah di buat 
-    $c_error = "alert alert-danger alert-dismissible fade show";
-    $pesan = "Silahkan login untuk melakukan transaksi";
-    $hide = " ";
-}
-
-if (isset($_GET['status']) && $_GET['status'] == 'reset-password-success') {
-    // pesan account sudah di buat 
-    $c_error = "alert alert-success alert-dismissible fade show";
-    $pesan = "Silahkan login menggunakan password baru anda";
-    $hide = " ";
 }
 
 if (isset($_POST['submit'])) {
     $email = strtolower($_POST['email']);
     $password = $_POST['password'];
 
-    $sql = mysqli_query($con, "SELECT * FROM `users` where `email`='$email'");
+    $sql = mysqli_query($con, "SELECT * FROM `admins` where `email`='$email'");
 
     if (mysqli_num_rows($sql) === 1) {
         $request = mysqli_fetch_assoc($sql);
@@ -38,14 +19,9 @@ if (isset($_POST['submit'])) {
         if (hash_equals($hashedInputPassword, $request['password'])) {
             $_SESSION['name'] = $request['name'];
             $_SESSION['email'] = $request['email'];
-            $_SESSION['role'] = 'member';
-            if (isset($_GET['status']) && $_GET['status']  == 'checkout') {
-                $redirectId = $_GET['redirect'];
-                header("location: ../page/checkout.php?id=" . $redirectId);
-            } else {
+            $_SESSION['role'] = 'admin';
 
-                header("location: ../index.php");
-            }
+            header("location: ../admin/index.php");
         } else {
             $c_error = "alert alert-danger alert-dismissible fade show";
             $pesan = "Email Atau Password Salah!";
@@ -82,7 +58,7 @@ if (isset($_POST['submit'])) {
             </div>
             <div class="row  pt-1 text-center justify-content-center">
                 <div class="pagelog  p-5 bg-white">
-                    <h2 class="mb-5">Login</h2>
+                    <h2 class="mb-5">Login admin</h2>
                     <form action="" method="post">
                         <div class="input-group mb-4">
                             <div class="input-group-prepend">
@@ -96,18 +72,9 @@ if (isset($_POST['submit'])) {
                             </div>
                             <input name="password" required type="password" class="form-control" placeholder="password">
                         </div>
-                        <div class="daftar text-right">
-                            <small>
-                                <a href="../auth/forgot-password.php">Lupa password!</a>
-                            </small>
-                        </div>
+
                         <button name="submit" class="mt-5 btn btn-primary col-6" type="submit">Login</button>
                         <br><br>
-                        <div class="daftar text-right">
-                            <small>
-                                <a href="../auth/register.php">Belum Punya Akun, Daftar Sekarang !</a>
-                            </small>
-                        </div>
                     </form>
                 </div>
             </div>

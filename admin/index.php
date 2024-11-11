@@ -1,15 +1,12 @@
 <?php
-$title = "Beranda";
-include "./app/init.php";
+$title = "Dashboard admin";
+include "../app/init.php";
 
-
-if (isset($_GET['q'])) {
-    $s = mysqli_real_escape_string($con, $_GET['q']);
-    $sql = mysqli_query($con, "SELECT * FROM `courses`  WHERE `status` ='publish' AND `title` LIKE '%$s%'  ORDER BY `id` DESC");
-} else {
-
-    $sql = mysqli_query($con, "SELECT * FROM `courses` WHERE `status` ='publish' ORDER BY `id` DESC");
+if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
+    header('location:../auth/login.php');
 }
+
+$sql = mysqli_query($con, "SELECT * FROM admins ORDER BY id DESC");
 
 ?>
 
@@ -22,8 +19,8 @@ if (isset($_GET['q'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <!-- Bootstrap, fontaweso and CSS -->
-    <link rel="stylesheet" href="./assets/css/bootstrap.min.css">
-    <link rel="stylesheet" href="./assets/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../assets/css/all.min.css">
     <style>
         body {
             background: #EAEAEF;
@@ -249,11 +246,12 @@ if (isset($_GET['q'])) {
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <?php if (!isset($_SESSION['name'])) { ?>
-                            <a class="dropdown-item" href="./auth/login.php">Masuk</a>
-                            <a class="dropdown-item" href="./auth/register.php">Daftar</a>
+                            <a class="dropdown-item" href="../auth/login.php">Masuk</a>
+                            <a class="dropdown-item" href="../auth/register.php">Daftar</a>
                         <?php } else { ?>
-                            <a class="dropdown-item " href="./myproduk.php">Kursus Saya</a>
-                            <a class="dropdown-item " href="./auth/logout.php">keluar</a>
+                            <a class="dropdown-item " href="./myproduk.php">List pembelian</a>
+                            <a class="dropdown-item " href="./myproduk.php">Kelola Admin</a>
+                            <a class="dropdown-item " href="./logout.php">keluar</a>
                         <?php } ?>
                     </div>
                 </div>
@@ -261,68 +259,46 @@ if (isset($_GET['q'])) {
             </div>
         </div>
     </nav>
-    <!-- product -->
-    <section class="features pt-5">
-        <div class="container pt-5">
+    <br>
 
-            <div class="row justify-content-end mt-4">
-                <div class="col-lg-9">
-                    <h4>Kelas terbaru</h4>
+    <div class="col-12 mb-2s  mt-2 p-3 ">
+        <div class="main-page container mt-5 p-4 bg-white p-2">
 
-                </div>
-                <div class="col-lg-3">
-                    <form action="">
-                        <div class="form-group">
-                            <input type="search" class="form-control" name="q" placeholder="Search..." value="<?= isset($s) ? $s : "" ?>" id="search">
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div class="row  text-center ">
+            <a class="btn btn-sm btn-secondary mb-3" href="./admin-create.php">Tambah admin</a>
 
-                <?php if (mysqli_num_rows($sql) > 0) {
-
-                    while ($course = mysqli_fetch_assoc($sql)) { ?>
-                        <div class="col-lg-3 col-sm-6 col-sm-6 pr-2 pt-3  ">
-                            <div class="sale p-3 bg-white bg-white" style="border-radius:4px;">
-                                <figure class="figure">
-                                    <a href="./page/course-detail.php?id=<?= $course['id']; ?>">
-                                        <img class="figure-img img-fluid " style="border-radius:4px;width:100%;" src="<?= $course['thumbnail'] ?>" alt="img">
-                                    </a>
-                                    <figcaption class="text-left figure-caption ">
-                                        <h5>
-                                            <a href="./page/course-detail.php?id=<?= $course['id']; ?>"><?= $course['title']; ?></a>
-                                        </h5>
-                                        <p class="har mt-2">Rp. <?= number_format($course['price'], 0, ',', '.'); ?> </p>
-                                    </figcaption>
-                                </figure>
-                            </div>
-                        </div>
-                    <?php }
-                } else { ?>
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-12 bg-white text-center" style="height:400px;border-radius:8px">
-                                <div>
-                                    <img class="mt-5 pt-2" style="width:110px;height:110px" src="./assets/icon/error.svg">
-                                    <h1 class="mt-4">oupss.!</h1>
-                                    <h5>Data Belum Tersedia</h3>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                <?php } ?>
+            <div class="table-responsive-sm">
+                <table class="table table-striped text-nowrap">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Nama</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php $i = 1;
+                        while ($admin = mysqli_fetch_assoc($sql)) { ?>
+                            <tr>
+                                <th scope="row"><?=
+                                                $i++ ?></th>
+                                <td><a class="text-dark" href="./admin-detail.php?id=<?= $admin['id'] ?>"><?= $admin['name']; ?></a></td>
+                                <td></i> <?= $admin['email'] ?></td>
+                                <td><a class="btn btn-sm btn-primary" href="./admin-edit.php?id=<?= $admin['id'] ?> ">Edit</a> | <a onclick="return confirm('anda yakin')" class="btn btn-sm btn-danger" href="./admin-delete.php?id=<?= $admin['id'] ?> ">Hapus</a></td>
+                            </tr>
+                        <?php } ?>
+                    </tbody>
+                </table>
             </div>
         </div>
-    </section>
+    </div>
     <!-- batas  -->
     <div id="res"></div>
     <!-- jQuery first, then Popper.js, then Bootstrap JS,than fontawesome -->
-    <script src="./assets/js/jquery-3.4.1.min.js"></script>
-    <script src="./assets/js/popper.min.js"></script>
-    <script src="./assets/js/bootstrap.min.js"></script>
-    <script src="./assets/js/all.js"></script>
+    <script src="../assets/js/jquery-3.4.1.min.js"></script>
+    <script src="../assets/js/popper.min.js"></script>
+    <script src="../assets/js/bootstrap.min.js"></script>
+    <script src="../assets/js/all.js"></script>
 </body>
 
 </html>

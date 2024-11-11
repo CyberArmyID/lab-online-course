@@ -9,16 +9,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav text-uppercase mx-auto col-10">
-                <li class="nav-item <?php if ($title == "Home") {
-                                        echo 'active';
-                                    } ?>">
-                    <a class="nav-link" href="./index.php">Home <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item <?php if ($title == "Produk") {
-                                        echo 'active';
-                                    } ?>">
-                    <a class="nav-link" href="./produk.php">Produk</a>
-                </li>
+
 
             </ul>
 
@@ -37,6 +28,7 @@
                         <a class="dropdown-item" href="../auth/login.php">Masuk</a>
                         <a class="dropdown-item" href="../auth/register.php">Daftar</a>
                     <?php } else { ?>
+                        <a class="dropdown-item " href="./myproduk.php">Riwayat Transaksi</a>
                         <a class="dropdown-item " href="./myproduk.php">Kursus Saya</a>
                         <a class="dropdown-item " href="../auth/logout.php">keluar</a>
                     <?php } ?>

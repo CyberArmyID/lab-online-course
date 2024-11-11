@@ -5,23 +5,42 @@ if (isset($_SESSION['name'])) {
     header('location:../index.php');
 }
 
+if (!isset($_GET['token']) || !isset($_GET['email'])) {
+    header('location:../index.php');
+}
+$token = $_GET['token'];
+$sqlToken = mysqli_query($con, "SELECT * FROM `user_tokens` WHERE `token` = '$token'");
+if (mysqli_num_rows($sqlToken) < 1) {
+    header('location:../index.php');
+}
+
 if (isset($_POST['submit'])) {
-    $email = strtolower(htmlspecialchars($_POST['email']));
+    $email = strtolower(htmlspecialchars($_GET['email']));
 
     $sql = mysqli_query($con, "SELECT * FROM `users` WHERE `email` = '$email'");
-    $name = $_POST['name'];
-    $password = $_POST['password'];
-    $password = sha1($password);
-    $img = "https://static.vecteezy.com/system/resources/previews/036/280/650/large_2x/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-illustration-vector.jpg";
+
     if (mysqli_num_rows($sql) === 1) {
-        $c_error = "alert alert-danger alert-dismissible fade show";
-        $pesan = "Email <b class='text-primary' >" . $email .  "</b> Sudah Terdaftar";
-        $hide = " ";
-    } else {
-        if ($name != null & $password != null & $email != null) {
-            $query = "INSERT INTO `users` (`name`, `email`, `password`, `avatar`) VALUES ('$name', '$email', '$password', '$img')";
+        $password = $_POST['password'];
+        $password_confirmation = $_POST['password_confirmation'];
+
+        if ($password === $password_confirmation) {
+            // Enkripsi password dengan SHA1
+            $hashed_password = sha1($password);
+
+            // Update password pada tabel users
+            $query = "UPDATE `users` SET `password` = '$hashed_password' WHERE `email` = '$email'";
             mysqli_query($con, $query);
-            header('Location:./login.php?status=register-success');
+
+            $sqlDeleteToken = mysqli_query($con, "DELETE FROM `user_tokens` WHERE `token` = '$token'");
+
+            // Redirect setelah password berhasil direset
+            header('Location: ./login.php?status=reset-password-success');
+            exit(); // Menghentikan eksekusi script setelah redirect
+        } else {
+            // Jika password tidak sesuai
+            $c_error = "alert alert-danger alert-dismissible fade show";
+            $pesan = "Konfirmasi password tidak cocok. Silakan coba lagi.";
+            $hide = " ";
         }
     }
 }
@@ -51,28 +70,21 @@ if (isset($_POST['submit'])) {
             </div>
             <div class="row mt-4 text-center justify-content-center">
                 <div class="pagelog  p-5 bg-white">
-                    <h2 class="mb-5">Register</h2>
+                    <h2 class="mb-5">Password baru</h2>
                     <form action="" method="post">
-                        <div class="input-group mb-4">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="basic-addon1"><i class="fa fa-user-alt"></i></i></span>
-                            </div>
-                            <input required name="name" type="text" class="form-control" placeholder="name">
-                        </div>
-                        <div class="input-group mb-4">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="basic-addon1">@</span>
-                            </div>
-                            <input required name="email" type="text" class="form-control" placeholder="Email">
-                        </div>
-
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="basic-addon1"><i class="fa fa-key"></i></i></span>
                             </div>
                             <input required name="password" type="password" class="form-control" placeholder="password">
                         </div>
-                        <button name="submit" class="mt-5 btn btn-primary col-6" type="submit"> Register</button>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1"><i class="fa fa-key"></i></i></span>
+                            </div>
+                            <input required name="password_confirmation" type="password" class="form-control" placeholder="Konfirmasi password">
+                        </div>
+                        <button name="submit" class="mt-5 btn btn-primary col-6" type="submit"> Update password</button>
                         <br><br>
                         <div class="daftar text-right">
                             <small>

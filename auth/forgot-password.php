@@ -1,10 +1,7 @@
 <?php
+
 include "../app/init.php";
-
-require '../vendor/autoload.php';
-
-use PHPMailer\PHPMailer\PHPMailer;
-
+include "../app/mail.php";
 
 if (isset($_SESSION['name'])) {
     header('location:../index.php');
@@ -22,21 +19,12 @@ if (isset($_POST['submit'])) {
 
         $token = bin2hex(random_bytes(16));
         // insert token dan kirim email
-        $sqlInsertToken = mysqli_query($con, "INSERT INTO `user_tokens` (`email`, `token`) VALUES ('$email', '$token')");
+        $sqlInsertToken = mysqli_query($con, "INSERT INTO `user_tokens` (`token`) VALUES ('$token')");
 
         if ($sqlInsertToken) {
             $request = mysqli_fetch_assoc($sql);
             // Send the email
-            $mail = new PHPMailer();
-            $mail->isSMTP();
-            $mail->Host = 'sandbox.smtp.mailtrap.io';
-            $mail->SMTPAuth = true;
-            $mail->Port = 2525;
-            $mail->Username = '296458e6d762df';
-            $mail->Password = '53399a46203004';
 
-            // Email sender and recipient settings
-            $mail->setFrom('info@belajaronline.com', 'Belajar online');
             $mail->addAddress($email);
 
             // Email content
@@ -49,9 +37,9 @@ if (isset($_POST['submit'])) {
                 </head>
                 <body>
                     <h1>Reset Password</h1>
-                    <p>Klik <a href="' . $host . '/auth/reset.php?token=' . $token . '">di sini</a> untuk mereset password.</p>
+                    <p>Klik <a href="' . $host . '/auth/reset.php?email=' . $email . '&token=' . $token . '">di sini</a> untuk mereset password.</p>
                     <p>Salin dan tempel link ini di browser Anda untuk mereset password: <br>
-                    ' . $host . '/auth/reset.php?token=' . $token . '</p>
+                    ' . $host . '/auth/reset.php?email=' . $email . '&token=' . $token . '</p>
                 </body>
                 </html>
             ';
@@ -63,7 +51,6 @@ if (isset($_POST['submit'])) {
                 $c_error = "alert alert-success alert-dismissible fade show";
                 $pesan = "Email telah dikirim. Silakan cek inbox Anda untuk melanjutkan proses reset password.";
                 $hide = " ";
-                header("location: ./login.php");
             } else {
                 $c_error = "alert alert-danger alert-dismissible fade show";
                 $pesan = "Gagal mengirim email. Silakan coba lagi. 1";
@@ -88,7 +75,7 @@ if (isset($_POST['submit'])) {
 
 <body style="background:#EAEAEF">
     <?php require "../template/nav.php" ?>
-    <div class="mt-3"></div>
+    <div class="mt-3">.</div>
 
     <!-- product -->
     <section class="features  pb-5 mt-5 mb-4">
