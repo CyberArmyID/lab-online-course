@@ -274,8 +274,8 @@ $sql = mysqli_query($con, "
                             <a class="dropdown-item" href="../auth/login.php">Masuk</a>
                             <a class="dropdown-item" href="../auth/register.php">Daftar</a>
                         <?php } else { ?>
-                            <a class="dropdown-item " href="./myproduk.php">List pembelian</a>
-                            <a class="dropdown-item " href="./myproduk.php">Kelola Admin</a>
+                            <a class="dropdown-item " href="./transactions.php">Riwayat Transaksi</a>
+                            <a class="dropdown-item " href="./index.php">Manage Admin</a>
                             <a class="dropdown-item " href="./logout.php">keluar</a>
                         <?php } ?>
                     </div>
