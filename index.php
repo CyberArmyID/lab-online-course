@@ -270,7 +270,11 @@ if (isset($_GET['q'])) {
 
             <div class="row justify-content-end mt-4">
                 <div class="col-lg-9">
-                    <h4>Kelas terbaru</h4>
+                    <?php if (isset($s) && $s != '') { ?>
+                        <h4>Pencarian : <?= $_GET['q'] ?></h4>
+                    <?php } else { ?>
+                        <h4>Kelas terbaru</h4>
+                    <?php } ?>
 
                 </div>
                 <div class="col-lg-3">

@@ -116,7 +116,9 @@ $rewardRdeemQuery = mysqli_query($con, $sqlRewardRdeems);
                                         <td>
                                             <?= htmlspecialchars($rewardReedem['status']) == 'redeemed' ? 'Berhasil' : 'Diproses'; ?>
                                         </td>
-                                        <td><a class="btn btn-sm btn-primary" href="./module.php?id=<?= htmlspecialchars($rewardReedem['id']); ?>">Redem</a></td>
+                                        <td>
+                                            <?= $rewardReedem['created_at'] ?>
+                                        </td>
                                     </tr>
                                 <?php
                                 } ?>

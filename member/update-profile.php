@@ -185,7 +185,7 @@ if (isset($_POST['submit'])) {
                                 </div>
                                 <div class="tom text-center">
                                     <button name="submit" class="btn btn-primary col-lg-5 mt-2" type="submit">Simpan</button>
-                                    <button class="batal btn btn-danger col-lg-5 mt-2" type="reset">Batal</button>
+                                    <a href="./profile.php" class="batal btn btn-danger col-lg-5 mt-2" type="reset">Batal</a>
                                 </div>
                             </div>
                         </div>
