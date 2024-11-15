@@ -243,7 +243,7 @@ if (isset($_GET['q'])) {
                         if (!isset($_SESSION['name'])) {
                             echo "user";
                         } else {
-                            echo substr($user['name'], 0, 18);
+                            echo $user['name'];
                         }
                         ?>
                     </a>

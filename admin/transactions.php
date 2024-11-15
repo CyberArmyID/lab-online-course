@@ -5,6 +5,9 @@ include "../app/init.php";
 if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
     header('location:../auth/login.php');
 }
+$searchKeyword = $_GET['search'] ?? '';
+
+//
 $sql = mysqli_query($con, "
     SELECT 
         purchases.id,
@@ -28,6 +31,10 @@ $sql = mysqli_query($con, "
         users ON purchases.user_id = users.id
     JOIN 
         courses ON purchases.course_id = courses.id
+    WHERE 
+        (users.name LIKE '%$searchKeyword%' OR 
+         courses.title LIKE '%$searchKeyword%' OR 
+         purchases.id LIKE '%$searchKeyword%')
     ORDER BY 
         purchases.id DESC
 ");
@@ -289,6 +296,23 @@ $sql = mysqli_query($con, "
         <div class="container mt-5">
             <div class="col-12 mb-2s  mt-2 p-3 ">
                 <div class="main-page container mt-5 p-4 bg-white p-2">
+                    <div class="row">
+                        <div class="col-9">
+                            <?php if (isset($_GET['search']) && $searchKeyword != '') { ?>
+                                <h4>Pencarian : <?= $_GET['search'] ?></h4>
+
+                            <?php } else { ?>
+                                <h4>Transaksi</h4>
+                            <?php } ?>
+                        </div>
+                        <div class="col-3 text-end">
+                            <form action="">
+                                <div class="form-group">
+                                    <input type="search" class="form-control" name="search" placeholder="Search..." value="<?= isset($searchKeyword) ? $searchKeyword : "" ?>" id="search">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                     <div class="table-responsive-sm">
                         <table class="table table-striped text-nowrap">
                             <thead>

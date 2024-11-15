@@ -236,13 +236,7 @@ $sql = mysqli_query($con, "SELECT * FROM admins ORDER BY id DESC");
 
                 <div class="nav-item dropdown col-lg-3 col-md-6 ">
                     <a class="nav-link dropdown-toggle user cart text-white" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <?php
-                        if (!isset($_SESSION['name'])) {
-                            echo "user";
-                        } else {
-                            echo substr($user['name'], 0, 18);
-                        }
-                        ?>
+                        <?= isset($_SESSION['name']) ? $_SESSION['name'] : 'user'; ?>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <?php if (!isset($_SESSION['name'])) { ?>
