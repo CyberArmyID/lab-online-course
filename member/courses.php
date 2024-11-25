@@ -30,6 +30,7 @@ $stmt = mysqli_prepare($con, $sql);
 mysqli_stmt_bind_param($stmt, "s", $email);
 mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
+
 ?>
 
 <!DOCTYPE html>
@@ -106,10 +107,34 @@ $result = mysqli_stmt_get_result($stmt);
                             <tbody>
                                 <?php $no = 1;
                                 while ($transaction = mysqli_fetch_assoc($result)) { ?>
+                                    <?php
+                                    $courseId = $transaction['course_id'];
+                                    $sql = "
+                                SELECT 
+                                    c.id AS id_course, 
+                                    c.title AS course_title, 
+                                    m.id AS id_material, 
+                                    m.title AS material_title, 
+                                    mo.id AS id_module,
+                                    mo.title AS module_title
+                                FROM 
+                                    courses c
+                                INNER JOIN 
+                                    modules mo ON c.id = mo.course_id
+                                INNER JOIN 
+                                    materials m ON mo.id = m.module_id
+                                WHERE 
+                                    c.id = $courseId
+                            ";
+
+                                    // Eksekusi query
+                                    $resultQuery = mysqli_query($con, $sql);
+                                    $course = mysqli_fetch_assoc($resultQuery);
+                                    ?>
                                     <tr>
                                         <th scope="row"><?= $no++ ?></th>
                                         <td><?= htmlspecialchars($transaction['course_title']); ?></td>
-                                        <td><a class="btn btn-sm btn-primary" href="./course.php?id=<?= htmlspecialchars($transaction['id']); ?>">Detail</a></td>
+                                        <td><a class="btn btn-sm btn-primary" href="./course.php?course=<?= $course['course_title']; ?>&module=<?= $course['module_title']; ?>&material=<?= $course['material_title']; ?>">Detail</a></td>
                                     </tr>
                                 <?php
                                 } ?>

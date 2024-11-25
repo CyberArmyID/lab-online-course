@@ -1,5 +1,5 @@
 <?php
-$title = "Dashboard Admin";
+$title = "Detail Kursus";
 include "../app/init.php";
 
 // Pastikan pengguna memiliki sesi aktif dengan peran 'admin'
@@ -9,31 +9,54 @@ if (!isset($_SESSION['role']) || $_SESSION['role'] != 'member') {
 }
 
 $email = $_SESSION['email'];
+if (!isset($_GET['course'])) {
+    echo "<script>
+    alert('Data tidak valid');
+    window.history.back();
+</script>";
+    exit();
+}
+$courseTitle = trim($_GET['course']);
 
 // Menggunakan Prepared Statements untuk keamanan
-$sql = "
-    SELECT 
-        user_courses.id,
-        users.email,
-        courses.id AS course_id,
-        courses.title AS course_title,
-        courses.thumbnail AS course_thumbnail,
-        courses.description AS course_description
-    FROM 
-        user_courses
-    JOIN 
-        users ON user_courses.user_id = users.id
-    JOIN 
-        courses ON user_courses.course_id = courses.id
-    WHERE users.email = '$email'
+$sql = "SELECT 
+            user_courses.id,
+            users.email,
+            courses.id AS course_id,
+            courses.title AS course_title,
+            courses.thumbnail AS course_thumbnail,
+            courses.description AS course_description
+        FROM 
+            user_courses
+        JOIN 
+            users ON user_courses.user_id = users.id
+        JOIN 
+            courses ON user_courses.course_id = courses.id
+        WHERE courses.title = '$courseTitle'
 ";
 $sqlPurchases = mysqli_query($con, $sql);
 
 $result = mysqli_fetch_assoc($sqlPurchases);
 if (isset($result['course_id'])) {
+    $moduleTitle = $_GET['module'];
+    $materialTitle = $_GET['material'];
+    if (!isset($_GET['module']) && !isset($_GET['material'])) {
+        echo "<script>
+        alert('Data tidak valid');
+        window.history.back();
+    </script>";
+        exit();
+    }
+
+    $sqlMaterial = "SELECT materials.*, modules.title AS module_title
+                    FROM materials
+                    JOIN modules ON materials.module_id = modules.id
+                    WHERE materials.title = '$materialTitle'";
+    $detailMaterialQuery = mysqli_query($con, $sqlMaterial);
+    $dataMaterial = mysqli_fetch_assoc($detailMaterialQuery);
     $courseId = $result['course_id'];
     $sqlModules = "SELECT * FROM modules WHERE course_id = $courseId";
-    $modules = mysqli_query($con, $sqlModules);
+    $moduleQuery = mysqli_query($con, $sqlModules);
 } else {
     echo "<script>
         alert('Anda belum memiliki kelas ini');
@@ -52,7 +75,6 @@ if (isset($result['course_id'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <?php
-    $title = "Transaksi ";
     include "../template/header.php" ?>
     <style>
         .main-page {
@@ -114,28 +136,31 @@ if (isset($result['course_id'])) {
                         </div>
                     </div>
                     <hr>
-                    <h4>Modul</h4>
-                    <div class="table-responsive-sm">
-                        <table class="table table-striped text-nowrap">
-                            <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Modul</th>
-                                    <th scope="col">Detail</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php $no = 1;
-                                while ($module = mysqli_fetch_assoc($modules)) { ?>
-                                    <tr>
-                                        <th scope="row"><?= $no++ ?></th>
-                                        <td><?= htmlspecialchars($module['title']); ?></td>
-                                        <td><a class="btn btn-sm btn-primary" href="./module.php?id=<?= htmlspecialchars($module['id']); ?>">Detail</a></td>
-                                    </tr>
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <ul>
                                 <?php
-                                } ?>
-                            </tbody>
-                        </table>
+
+                                while ($module = mysqli_fetch_assoc($moduleQuery)) {
+                                    $allModuleId = $module['id'];
+                                    $sqlMaterials = "SELECT * FROM materials WHERE module_id = $allModuleId";
+                                    $materialQuery = mysqli_query($con, $sqlMaterials);
+                                ?>
+                                    <li><?= $module['title'] ?></li>
+                                    <ul>
+                                        <?php $no = 1;
+                                        while ($material = mysqli_fetch_assoc($materialQuery)) { ?>
+                                            <li><a href="./course.php?course=<?= $result['course_title']; ?>&module=<?= $module['title']; ?>&material=<?= $material['title']; ?>"><?= $material['title']; ?></a></li>
+                                        <?php } ?>
+                                    </ul>
+                                <?php } ?>
+                            </ul>
+                        </div>
+                        <div class="col-lg-9">
+                            <h3><?= $dataMaterial['title'] ?></h3>
+                            <hr>
+                            <?= $dataMaterial['content'] ?>
+                        </div>
                     </div>
                 </div>
             </div>
