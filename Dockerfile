@@ -2,7 +2,7 @@
 FROM php:8.2-apache
 
 # Copy source code aplikasi ke dalam container
-COPY ./src /var/www/html
+COPY . /var/www/html
 
 # Mengatur permission
 RUN chown -R www-data:www-data /var/www/html \
