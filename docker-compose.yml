@@ -9,7 +9,7 @@ services:
     volumes:
       - ./:/var/www/html
     ports:
-      - "8181:80"
+      - "8005:80"
     depends_on:
       - db
     networks:
@@ -19,7 +19,7 @@ services:
     image: mysql:8.0
     container_name: mysql_db_lab_belajar_oline
     environment:
-      MYSQL_ROOT_PASSWORD: sandwich
+      MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: lab_belajar_online
     ports:
       - "3309:3306" 
@@ -27,6 +27,20 @@ services:
       - ./database.sql:/docker-entrypoint-initdb.d/database.sql:ro
     networks:
       - app-network  # Connect to the custom network
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: phpmyadmin_lab_belajar_online
+    depends_on:
+      - db
+    ports:
+      - "9005:80"  
+    environment:
+      PMA_HOST: db  # Nama service MySQL
+      MYSQL_ROOT_PASSWORD: root
+    networks:
+      - app-network  # Connect to the custom network
+    restart: always
 
 volumes:
   db_data:
