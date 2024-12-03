@@ -15,7 +15,7 @@ if (isset($_POST['submit'])) {
         $request = mysqli_fetch_assoc($sql);
 
         $hashedInputPassword = sha1($password);
-   
+
         if (hash_equals($hashedInputPassword, $request['password'])) {
             $_SESSION['name'] = $request['name'];
             $_SESSION['email'] = $request['email'];
