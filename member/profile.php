@@ -59,19 +59,19 @@ if ($user) {
                         <div class="row">
                             <div class="col-sm-5 text-center mb-3">
                                 <div class="img-user mb-3">
-                                    <img src="../assets/uploads/avatars/<?= htmlspecialchars($user['avatar']) ?>" alt="User Avatar">
+                                    <img src="../assets/uploads/avatars/<?= $user['avatar']; ?>" alt="User Avatar">
                                 </div>
                                 <a href="./update-profile.php" class="btn-sm btn btn-outline-success col-lg-3" style="border-radius:50px">Edit Profile</a>
                             </div>
                             <div class="col-sm-6 text-center">
-                                <h4 class="nama-user"><?= ucwords(htmlspecialchars($user['name'])); ?></h4>
-                                <h6 class=""><?= htmlspecialchars($user['email']); ?></h6>
-                                <span class="badge badge-primary"><?= htmlspecialchars($user['point']); ?> Point</span>
+                                <h4 class="nama-user"><?= $user['name']; ?></h4>
+                                <h6 class=""><?= $user['email']; ?></h6>
+                                <span class="badge badge-primary"><?= $user['point']; ?> Point</span>
                                 <div class="info mt-4">
                                     <div class="row">
                                         <div class="deskripsi col-12">
                                             <hr>
-                                            <p><?= ucfirst(htmlspecialchars($user['bio'])); ?></p>
+                                            <p><?= $user['bio']; ?></p>
                                         </div>
                                     </div>
                                 </div>

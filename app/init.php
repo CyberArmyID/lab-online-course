@@ -2,10 +2,10 @@
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
-$con = mysqli_connect('172.21.0.2', 'root', 'root', 'lab_belajar_online', 3306);
+$con = mysqli_connect('mysql_db_lab_belajar_oline', 'root', 'root', 'lab_belajar_online', 3306);
 
 session_start();
-$host = 'http://127.0.0.1:8005';
+$host = 'http://localhost:8005';
 //default pesan
 $c_error = " ";
 $pesan = " ";

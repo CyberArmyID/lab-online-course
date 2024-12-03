@@ -13,18 +13,19 @@ $id = $user['id'];
 // eksekusi
 if (isset($_POST['submit'])) {
 
-    $name = $_POST['name'];
+    $name = $con->real_escape_string($_POST['name']);
     $email = $user['email'];
-    $bio      = trim($_POST['bio']);
+    $bio      =$con->real_escape_string($_POST['bio']);
+
     $password = sha1($_POST['password']);
     $konfirpw = sha1($_POST['konfirpw']);
-    $img = $user['img'];
+    $img = @$user['img'];
 
     // jika terjadi kekosongan data maka masukkan data yang di database
     if (isset($_POST['name']) == null & isset($_POST['email']) == null & isset($_POST['password']) == null & isset($_POST['bio']) == null) {
         $name = $user['name'];
         $email = $user['email'];
-        $bio      = $usre['bio'];
+        $bio      = $user['bio'];
     }
     if ($_POST['password'] == null) {
         $password = $user['password'];

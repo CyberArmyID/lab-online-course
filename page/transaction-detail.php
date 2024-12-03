@@ -8,9 +8,7 @@ if (!isset($_GET['trx'])) {
 if (!isset($_SESSION['name'])) {
     header('location:../auth/login.php?status=checkout&redirect=' . $id);
 }
-$id = mysqli_real_escape_string($con, $_GET['trx']);
-
-
+$id = $_GET['trx'];
 
 
 $email = $_SESSION['email'];
@@ -34,7 +32,7 @@ if (isset($_POST['submit'])) {
         echo "<script> alert('Terjadi kesalahan upload file') </script>";
     }
 }
-$sqlTrx = mysqli_query($con, "SELECT * FROM `purchases`  WHERE `id`='$id' and `user_id`='$userId'");
+$sqlTrx = mysqli_query($con, "SELECT * FROM `purchases`  WHERE `id`='$id'");
 if (mysqli_num_rows($sqlTrx) === 1) {
     $bg = "main-page container mt-5 p-4 bg-white p-2";
 } else {

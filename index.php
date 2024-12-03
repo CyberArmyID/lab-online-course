@@ -4,8 +4,10 @@ include "./app/init.php";
 
 
 if (isset($_GET['q'])) {
-    $s = mysqli_real_escape_string($con, $_GET['q']);
-    $sql = mysqli_query($con, "SELECT * FROM `courses`  WHERE `status` ='publish' AND `title` LIKE '%$s%'  ORDER BY `id` DESC");
+    //$s = real_escape_string($con, $_GET['q']);
+    $s = $con->real_escape_string($_GET['q']);
+    $sql = mysqli_query($con, "SELECT * FROM `courses`  WHERE `status` ='publish' AND `title` = '$s'  ORDER BY `id` DESC");
+
 } else {
 
     $sql = mysqli_query($con, "SELECT * FROM `courses` WHERE `status` ='publish' ORDER BY `id` DESC");
